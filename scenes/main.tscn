@@ -1,0 +1,79 @@
+[gd_scene load_steps=17 format=3 uid="uid://cfmow14eteqyk"]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_tmw5o"]
+[ext_resource type="PackedScene" uid="uid://b4kad2kuba1yn" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_hand_low.tscn" id="2_bi3q3"]
+[ext_resource type="PackedScene" uid="uid://fiul51tsyoop" path="res://addons/godot-xr-tools/functions/function_teleport.tscn" id="3_ny1j8"]
+[ext_resource type="PackedScene" uid="uid://l2n30mpbkdyw" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_hand_low.tscn" id="4_ikci0"]
+[ext_resource type="PackedScene" uid="uid://b6bk2pj8vbj28" path="res://addons/godot-xr-tools/functions/movement_turn.tscn" id="5_c38wo"]
+[ext_resource type="PackedScene" uid="uid://bl2nuu3qhlb5k" path="res://addons/godot-xr-tools/functions/movement_direct.tscn" id="6_76ftw"]
+[ext_resource type="PackedScene" uid="uid://b4ysuy43poobf" path="res://addons/godot-xr-tools/functions/function_pickup.tscn" id="7_51jdh"]
+[ext_resource type="PackedScene" path="res://addons/godot-xr-tools/misc/vr_common_shader_cache.tscn" id="8_ukok4"]
+[ext_resource type="PackedScene" uid="uid://diyu06cw06syv" path="res://addons/godot-xr-tools/player/player_body.tscn" id="9_2ldin"]
+[ext_resource type="Texture2D" uid="uid://bfxv0qnsya0e7" path="res://texture.png" id="10_63u41"]
+[ext_resource type="PackedScene" uid="uid://b5ho23lrrf85r" path="res://objects/switch.tscn" id="11_k6j2j"]
+
+[sub_resource type="Environment" id="Environment_6j8at"]
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_na1tx"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xkefd"]
+albedo_texture = ExtResource("10_63u41")
+uv1_scale = Vector3(100, 100, 100)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_urrtg"]
+material = SubResource("StandardMaterial3D_xkefd")
+size = Vector2(100, 100)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ut1x8"]
+size = Vector3(100, 1, 100)
+
+[node name="main" type="Node3D"]
+script = ExtResource("1_tmw5o")
+
+[node name="XROrigin3D" type="XROrigin3D" parent="."]
+
+[node name="LeftHand" type="XRController3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+tracker = &"left_hand"
+
+[node name="LeftHand" parent="XROrigin3D/LeftHand" instance=ExtResource("2_bi3q3")]
+
+[node name="FunctionTeleport" parent="XROrigin3D/LeftHand" instance=ExtResource("3_ny1j8")]
+
+[node name="RightHand" type="XRController3D" parent="XROrigin3D"]
+tracker = &"right_hand"
+
+[node name="RightHand" parent="XROrigin3D/RightHand" instance=ExtResource("4_ikci0")]
+
+[node name="MovementTurn" parent="XROrigin3D/RightHand" instance=ExtResource("5_c38wo")]
+
+[node name="MovementDirect" parent="XROrigin3D/RightHand" instance=ExtResource("6_76ftw")]
+
+[node name="FunctionPickup" parent="XROrigin3D/RightHand" instance=ExtResource("7_51jdh")]
+
+[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
+
+[node name="VRCommonShaderCache" parent="XROrigin3D/XRCamera3D" instance=ExtResource("8_ukok4")]
+
+[node name="PlayerBody" parent="XROrigin3D" instance=ExtResource("9_2ldin")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_6j8at")
+camera_attributes = SubResource("CameraAttributesPractical_na1tx")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
+transform = Transform3D(0.868346, -0.34735, 0.35401, 0, 0.713789, 0.700361, -0.495959, -0.608156, 0.619815, 0, 18.489, 0)
+
+[node name="Floor" type="StaticBody3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("PlaneMesh_urrtg")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.456564, 0)
+shape = SubResource("BoxShape3D_ut1x8")
+
+[node name="Room1" type="Node3D" parent="."]
+
+[node name="switch" parent="Room1" instance=ExtResource("11_k6j2j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.65628, 0.043436, -2.18678)

@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3 uid="uid://k82vej3vb6sm"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_7k5b3"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_mhr3a"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="CableSegment" type="RigidBody3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CableSegment"]
+mesh = SubResource("CylinderMesh_7k5b3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CableSegment"]
+shape = SubResource("CylinderShape3D_mhr3a")
+
+[node name="PinJoint3D" type="PinJoint3D" parent="."]
+node_a = NodePath("../CableSegment")
+node_b = NodePath("../CableSegment2")
+
+[node name="CableSegment2" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.00791, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CableSegment2"]
+mesh = SubResource("CylinderMesh_7k5b3")
+skeleton = NodePath("../../CableSegment2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CableSegment2"]
+shape = SubResource("CylinderShape3D_mhr3a")
